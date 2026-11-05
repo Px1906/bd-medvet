@@ -13,8 +13,22 @@ bd-medvet/
 └── sql/
     ├── ddl/                 # Criação da estrutura (CREATE TABLE, ALTER, índices)
     ├── dml/                 # Carga de dados (INSERT, UPDATE, DELETE)
-    └── consultas/           # Consultas (SELECT) para relatórios e testes
+    └── consultas/           # Consultas (SELECT) para relatórios e testes    
 ```
+
+# Modelagem do Banco de Dados
+
+Documentação da modelagem do sistema de gerenciamento
+da Clínica Veterinária Vida Animal.
+
+## Entregas
+
+- Diagrama Entidade-Relacionamento (DER)
+- Modelo lógico normalizado até a 3FN
+- Scripts de criação das tabelas e chaves estrangeiras
+- Scripts de carga de dados
+- Consultas SQL para os relatórios
+
 
 ## Como executar
 
