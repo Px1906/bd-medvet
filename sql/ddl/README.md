@@ -29,3 +29,9 @@ Execute os arquivos em ordem numérica. Cada tabela é criada depois das tabelas
 | 19 | `19_item_cobranca.sql` | `cobranca`, `estoque`, `procedimento_realizado` |
 | 20 | `20_pagamento.sql` | `cobranca` |
 | 21 | `21_recibo.sql` | `pagamento` |
+| 22 | `22_alter_veterinario.sql` | `veterinario`, `funcionario` |
+| 23 | `23_alter_estoque.sql` | `estoque` |
+| 24 | `24_alter_movimentacao_estoque.sql` | `movimentacao_estoque` |
+| 25 | `25_alter_prontuario.sql` | `prontuario` |
+
+Os scripts 22 a 25 ajustam as tabelas ao DER. Execute cada um apenas uma vez, com backup se o banco já tiver dados: o 22 migra e remove `nome` e `telefone` de `veterinario`, e o 23 remove `quantidade` de `estoque`.
