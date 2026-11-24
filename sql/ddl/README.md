@@ -31,7 +31,8 @@ Execute os arquivos em ordem numérica. Cada tabela é criada depois das tabelas
 | 21 | `21_recibo.sql` | `pagamento` |
 | 22 | `22_alter_veterinario.sql` | `veterinario`, `funcionario` |
 | 23 | `23_alter_estoque.sql` | `estoque` |
-| 24 | `24_alter_movimentacao_estoque.sql` | `movimentacao_estoque` |
+| 24 | `24_alter_evolucao_internacao.sql` | `evolucao_internacao` |
 | 25 | `25_alter_prontuario.sql` | `prontuario` |
+| 26 | `26_alter_termo_consentimento.sql` | `termo_consentimento` |
 
-Os scripts 22 a 25 ajustam as tabelas ao DER. Execute cada um apenas uma vez, com backup se o banco já tiver dados: o 22 migra e remove `nome` e `telefone` de `veterinario`, e o 23 remove `quantidade` de `estoque`.
+Os scripts 22, 23 e 25 ajustam as tabelas ao DER; o 24 e o 26 padronizam as chaves primárias como `id_(nome da tabela)`. Execute cada um apenas uma vez, com backup se o banco já tiver dados: o 22 migra e remove `nome` e `telefone` de `veterinario`, e o 23 remove `quantidade` de `estoque`.
