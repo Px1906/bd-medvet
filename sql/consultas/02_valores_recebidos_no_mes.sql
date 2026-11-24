@@ -1,14 +1,10 @@
 -- Relatório 2: valores recebidos no mês atual, um pagamento por linha.
 -- A descrição lista os itens da cobrança à qual o pagamento se refere.
-USE medvetdb;
 
-SET SESSION group_concat_max_len = 10000;
-
--- Primeiro dia do mês atual no horário de Brasília.
--- Para outro mês: SET @inicio_mes = CAST('2026-11-01' AS DATE);
-SET @inicio_mes = CAST(DATE_FORMAT(UTC_TIMESTAMP() - INTERVAL 3 HOUR, '%Y-%m-01') AS DATE);
-
-SELECT
+-- O mês atual é calculado no horário de Brasília (o servidor pode estar em UTC).
+-- Para outro mês, troque a expressão à direita no WHERE por um mês, como '2026-11'.
+-- O SET_VAR evita que descrições longas sejam cortadas.
+SELECT /*+ SET_VAR(group_concat_max_len = 10000) */
   p.id_pagamento,
   p.data_pagamento,
   t.Nome AS tutor,
@@ -21,8 +17,8 @@ SELECT
   p.forma_pagamento,
   p.valor_pago,
   SUM(p.valor_pago) OVER () AS total_recebido_no_mes
-FROM pagamento p
-JOIN cobranca c ON c.id_cobranca = p.id_cobranca
+FROM medvetdb.pagamento p
+JOIN medvetdb.cobranca c ON c.id_cobranca = p.id_cobranca
 LEFT JOIN (
   SELECT
     id_cobranca,
@@ -30,13 +26,12 @@ LEFT JOIN (
       CONCAT(descricao, ' (', quantidade, ' x R$ ', valor_unitario, ')')
       ORDER BY id_item_cobranca SEPARATOR '; '
     ) AS descricao
-  FROM item_cobranca
+  FROM medvetdb.item_cobranca
   GROUP BY id_cobranca
 ) it ON it.id_cobranca = c.id_cobranca
-LEFT JOIN internacao i ON i.id_internacao = c.id_internacao
-LEFT JOIN atendimento a ON a.id_atendimento = COALESCE(i.id_atendimento, c.id_atendimento)
-LEFT JOIN animal an ON an.id_animal = a.id_animal
-LEFT JOIN tutor t ON t.CPF = an.cpf_tutor
-WHERE p.data_pagamento >= @inicio_mes
-  AND p.data_pagamento < @inicio_mes + INTERVAL 1 MONTH
+LEFT JOIN medvetdb.internacao i ON i.id_internacao = c.id_internacao
+LEFT JOIN medvetdb.atendimento a ON a.id_atendimento = COALESCE(i.id_atendimento, c.id_atendimento)
+LEFT JOIN medvetdb.animal an ON an.id_animal = a.id_animal
+LEFT JOIN medvetdb.tutor t ON t.CPF = an.cpf_tutor
+WHERE DATE_FORMAT(p.data_pagamento, '%Y-%m') = DATE_FORMAT(UTC_TIMESTAMP() - INTERVAL 3 HOUR, '%Y-%m')
 ORDER BY p.data_pagamento, p.id_pagamento;
