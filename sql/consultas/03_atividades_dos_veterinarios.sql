@@ -1,6 +1,3 @@
--- Relatório 3: todos os veterinários, com seus atendimentos e procedimentos
--- e o pet atendido. Quem não tem atividade aparece com as colunas em NULL.
-
 SELECT
   f.nome AS veterinario,
   v.crmv,
@@ -9,8 +6,8 @@ SELECT
   atv.procedimento,
   atv.data_hora,
   an.nome_animal AS pet
-FROM medvetdb.veterinario v
-JOIN medvetdb.funcionario f ON f.id_funcionario = v.id_funcionario
+FROM veterinario v
+JOIN funcionario f ON f.id_funcionario = v.id_funcionario
 LEFT JOIN (
   SELECT
     a.crmv_veterinario,
@@ -18,7 +15,7 @@ LEFT JOIN (
     NULL AS procedimento,
     a.data_hora,
     a.id_animal
-  FROM medvetdb.atendimento a
+  FROM atendimento a
 
   UNION ALL
 
@@ -29,9 +26,9 @@ LEFT JOIN (
     pc.nome,
     pr.data_hora,
     a.id_animal
-  FROM medvetdb.procedimento_realizado pr
-  JOIN medvetdb.procedimento pc ON pc.id_procedimento = pr.id_procedimento
-  JOIN medvetdb.atendimento a ON a.id_atendimento = pr.id_atendimento
+  FROM procedimento_realizado pr
+  JOIN procedimento pc ON pc.id_procedimento = pr.id_procedimento
+  JOIN atendimento a ON a.id_atendimento = pr.id_atendimento
 ) atv ON atv.crmv_veterinario = v.crmv
-LEFT JOIN medvetdb.animal an ON an.id_animal = atv.id_animal
+LEFT JOIN animal an ON an.id_animal = atv.id_animal
 ORDER BY veterinario, v.crmv, atv.data_hora, atv.tipo_atividade;
